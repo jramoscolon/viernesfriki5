@@ -25,6 +25,7 @@ class EpisodesController < ApplicationController
   # POST /episodes.json
   def create
     @episode = Episode.new(episode_params)
+    @episode.user = User.first #hard-coding the user. This will be deleted.
 
     respond_to do |format|
       if @episode.save
