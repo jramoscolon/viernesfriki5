@@ -1,19 +1,39 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Title:</strong>
-  <%= @episode.title %>
-</p>
+<div class="container-fluid">
+	<!-- Adds the gravatar and user information -->
+	<% if @episode.user %> <!-- Checks if the episode has a user -->
+		<ul class="listing">
+			<div class="row">
+				<div class="col-md-4 col-md-offset-4">
+					<li>Created by:</li>
+					<li><%= link_to @episode.user.username, user_path(@episode.user)%><br></li>
+					<li><%= link_to gravatar_for(@episode.user), user_path(@episode.user) %></li>
+					<li><small><%= pluralize(@episode.user.episodes.count, "episode") if @episode.user.episodes %></small></li>
+				</div><!-- col -->
+			</div><!-- end of container -->
+		</ul>
+	<% end %>
 
-<p>
-  <strong>Body:</strong>
-  <%= @episode.body %>
-</p>
+	<!-- Contains the main information for this page -->
+	<div align="center">
+		<p>
+		  <strong>Title:</strong>
+		  <%= @episode.title %>
+		</p>
 
-<p>
-  <strong>Image url:</strong>
-  <%= @episode.image_url %>
-</p>
+		<p>
+		  <strong>Body:</strong>
+		  <%= @episode.body %>
+		</p>
 
-<%= link_to 'Edit', edit_episode_path(@episode) %> |
-<%= link_to 'Back', episodes_path %>
+		<p>
+		  <strong>Image url:</strong>
+		  <%= @episode.image_url %>
+		</p>
+
+		<%= link_to 'Edit', edit_episode_path(@episode) %> |
+		<%= link_to 'Back', episodes_path %>
+	</div>
+	
+</div>
