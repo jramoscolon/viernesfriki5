@@ -1,0 +1,17 @@
+<% obj.each do |episode| %>
+  <h2><%= episode.title %></h2>
+  <p><%= episode.body %></p>
+  <div class="img-circle"><%= episode.image_url %></div>
+    
+  <div class="user-info"><!-- Include the user info below -->
+    <small>Created by: <%= episode.user.username if episode.user %>,
+            <%= time_ago_in_words(episode.created_at) %> ago,
+            <%= time_ago_in_words(episode.updated_at) %> ago
+    </small>
+  </div><!-- user info -->
+  <div>
+    <%= link_to 'Show', episode %> |
+    <%= link_to 'Edit', edit_episode_path(episode) %> |
+    <%= link_to 'Destroy', episode, method: :delete, data: { confirm: 'Are you sure?' } %>
+  </div>
+<% end %>

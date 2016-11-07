@@ -1,0 +1,9 @@
+<div class="container-fluid">
+	<h1>Welcome to <%= @user.username %>'s Page</h1>
+
+	<div>
+		<%= gravatar_for @user, size: 150 %>
+	</div>
+
+	<%= render 'episodes/episode', obj: @user.episodes %>
+</div>
