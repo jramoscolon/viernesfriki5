@@ -11,7 +11,9 @@
   </div><!-- user info -->
   <div>
     <%= link_to 'Show', episode %> |
+    <% if logged_in? %>
     <%= link_to 'Edit', edit_episode_path(episode) %> |
     <%= link_to 'Destroy', episode, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
   </div>
 <% end %>

@@ -1,5 +1,7 @@
 class EpisodesController < ApplicationController
   before_action :set_episode, only: [:show, :edit, :update, :destroy]
+  before_action :require_user, except: [:index, :show]
+  before_action :require_same_user, only: [:edit, :update, :destroy]
 
   # GET /episodes
   # GET /episodes.json
@@ -25,41 +27,35 @@ class EpisodesController < ApplicationController
   # POST /episodes.json
   def create
     @episode = Episode.new(episode_params)
-    @episode.user = User.first #hard-coding the user. This will be deleted.
-
-    respond_to do |format|
-      if @episode.save
-        format.html { redirect_to @episode, notice: 'Episode was successfully created.' }
-        format.json { render :show, status: :created, location: @episode }
-      else
-        format.html { render :new }
-        format.json { render json: @episode.errors, status: :unprocessable_entity }
-      end
+    @episode.user = current_user
+    if @episode.save
+      flash[:success] = "Article was successfully created"
+      redirect_to episode_path(@episode)
+    else
+      render 'new'
     end
   end
 
   # PATCH/PUT /episodes/1
   # PATCH/PUT /episodes/1.json
   def update
-    respond_to do |format|
-      if @episode.update(episode_params)
-        format.html { redirect_to @episode, notice: 'Episode was successfully updated.' }
-        format.json { render :show, status: :ok, location: @episode }
-      else
-        format.html { render :edit }
-        format.json { render json: @episode.errors, status: :unprocessable_entity }
-      end
+    if @episode.update(episode_params)
+      flash[:success] = "Episode was successfully updated"
+      redirect_to episode_path(@episode)
+    else
+      render 'edit'
     end
   end
+
+
 
   # DELETE /episodes/1
   # DELETE /episodes/1.json
   def destroy
     @episode.destroy
-    respond_to do |format|
-      format.html { redirect_to episodes_url, notice: 'Episode was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash[:danger] = "Article was successfully deleted"
+    redirect_to episodes_path
+
   end
 
   private
@@ -71,5 +67,12 @@ class EpisodesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def episode_params
       params.require(:episode).permit(:title, :body, :image_url)
+    end
+
+    def require_same_user
+      if current_user != @episode.user
+        flash[:danger] = "You can only edit or delete your wn articles"
+        redirect_to root_path
+      end
     end
 end
